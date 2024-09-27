@@ -132,21 +132,23 @@ def discover_printers():
 
 def analyze_printer(ip):
     print(f"\n[*] Analyzing printer at {ip}")
-    send_udp_packet(ip)
+    udp_sent = send_udp_packet(ip)
     ipp_response_received = probe_ipp(ip)
     cups_web_interface = check_web_interface(ip)
     
-    if not ipp_response_received:
-        print(f"[!] No IPP response received from {ip}. This could indicate the printer is offline or not supporting IPP.")
+    if udp_sent:
+        print(f"[!] UDP packet sent successfully. The system at {ip} might be vulnerable to CVE-2024-47176 (CVSS 8.6).")
     
-    if not ipp_response_received and not cups_web_interface:
-        print(f"[*] No clear indicators of CUPS-related vulnerabilities detected for {ip}.")
-        print(f"[*] However, this does not guarantee the absence of vulnerabilities.")
-        print(f"[*] Further manual investigation may be necessary for a comprehensive assessment.")
-    elif ipp_response_received or cups_web_interface:
-        print(f"[!] Printer at {ip} shows potential indicators of CUPS-related vulnerabilities.")
-        print(f"[!] Further investigation and verification is strongly recommended.")
+    if ipp_response_received:
+        print(f"[!] IPP response received. The system at {ip} might be vulnerable to CVE-2024-47076 (CVSS 8.6).")
+    else:
+        print(f"[*] No IPP response received from {ip}. This doesn't rule out other vulnerabilities in the chain.")
     
+    if cups_web_interface:
+        print(f"[!] CUPS web interface detected. The system at {ip} might be running a vulnerable version of CUPS.")
+    
+    print(f"[*] Note: This scan cannot detect the potential for command execution (CVE-2024-47177, CVSS 9.9).")
+    print(f"[*] Further manual investigation is necessary for a comprehensive assessment.")
     print(f"[*] Analysis complete for {ip}\n")
 
 if __name__ == "__main__":
