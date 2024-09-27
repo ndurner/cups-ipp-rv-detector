@@ -18,6 +18,7 @@ This project is a work-in-progress tool designed to detect potential vulnerabili
 - It cannot definitively confirm the presence of vulnerabilities, only potential indicators
 - The script doesn't check all components mentioned in the original vulnerability report
 - Detection methods may produce false positives or negatives
+- The tool doesn't currently check for zeroconf/mDNS vulnerabilities mentioned in the original report
 
 ## Usage
 
