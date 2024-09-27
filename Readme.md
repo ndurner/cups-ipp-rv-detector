@@ -59,12 +59,16 @@ We're particularly interested in:
 - Enhancing the tool's performance and reliability
 - Adding support for different environments and CUPS versions
 
-## Future Work
+## Potential Enhancements
 
-- Implement more comprehensive checks for all components mentioned in the original vulnerability report
-- Develop methods to reduce false positives and negatives
-- Add options for more detailed scans and reporting
-- Explore potential for safe, controlled exploitation to confirm vulnerabilities
+The following are areas that could potentially enhance the capabilities of this tool:
+
+- More comprehensive checks for all components mentioned in the vulnerability breakdown (cups-browsed, libppd, cups-filters).
+- Methods to safely detect the potential for malicious IPP attribute processing and command execution without actual exploitation.
+- Addition of references to specific vulnerable code sections as identified in the GitHub links provided in the vulnerability report.
+- Improved detection mechanisms for systems that may be vulnerable but do not respond to current probing methods.
+
+Note: These are suggestions for possible improvements and do not represent committed future work or guaranteed updates to the tool.
 
 ## License
 
