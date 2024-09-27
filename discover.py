@@ -48,14 +48,17 @@ def probe_ipp(ip, port=631):
         if response:
             version = struct.unpack('>H', response[:2])[0]
             status = struct.unpack('>H', response[2:4])[0]
-            print(f"[+] IPP Response: Version {version//100}.{version%100}, Status {status}")
+            print(f"[+] IPP Response received: Version {version//100}.{version%100}, Status {status}")
             
             cups_indicators = check_cups_indicators(response)
             if cups_indicators:
                 print(f"[!] CUPS identified in IPP response: {', '.join(cups_indicators)}")
             else:
-                print("[+] No strong CUPS indicators found in IPP response")
+                print("[+] No clear CUPS indicators found in IPP response")
             return True
+        else:
+            print("[-] No IPP response received")
+            return False
     except Exception as e:
         print(f"[-] IPP probing failed: {e}")
     return False
@@ -130,14 +133,17 @@ def discover_printers():
 def analyze_printer(ip):
     print(f"\n[*] Analyzing printer at {ip}")
     send_udp_packet(ip)
-    ipp_vulnerable = probe_ipp(ip)
+    ipp_response_received = probe_ipp(ip)
     cups_web_interface = check_web_interface(ip)
     
-    if not ipp_vulnerable and not cups_web_interface:
+    if not ipp_response_received:
+        print(f"[!] No IPP response received from {ip}. This could indicate the printer is offline or not supporting IPP.")
+    
+    if not ipp_response_received and not cups_web_interface:
         print(f"[*] No clear indicators of CUPS-related vulnerabilities detected for {ip}.")
         print(f"[*] However, this does not guarantee the absence of vulnerabilities.")
         print(f"[*] Further manual investigation may be necessary for a comprehensive assessment.")
-    elif ipp_vulnerable or cups_web_interface:
+    elif ipp_response_received or cups_web_interface:
         print(f"[!] Printer at {ip} shows potential indicators of CUPS-related vulnerabilities.")
         print(f"[!] Further investigation and verification is strongly recommended.")
     
