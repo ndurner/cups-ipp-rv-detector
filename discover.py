@@ -145,8 +145,8 @@ def analyze_printer(ip):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python script.py <printer_ip>")
-        print("Or use 'discover' to find printers: python script.py discover")
+        print("Usage: python discover.py <printer_ip>")
+        print("Or use 'discover' to find printers: python discover.py discover")
         sys.exit(1)
 
     if sys.argv[1] == "discover":
